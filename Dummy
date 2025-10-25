@@ -15,11 +15,13 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.StringReader;
-import java.util.Set;
+import java.util.*;
 
 @Service
+@Transactional
 public class EmployeeXmlService {
 
     private final EmployeeRepository employeeRepository;
@@ -30,31 +32,87 @@ public class EmployeeXmlService {
         this.employeeRepository = employeeRepository;
         this.jaxbContext = jaxbContext;
 
-        // Initialize Javax Validation (for @NotNull, @Email, etc)
+        // Initialize javax.validation validator
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         this.validator = factory.getValidator();
     }
 
-    // Main method to process incoming XML
-    public Employee processAndSaveEmployeeXml(String xmlContent) throws Exception {
+    // ------------------------------------------------------------
+    // 1️⃣ CREATE EMPLOYEE (POST /employees)
+    // ------------------------------------------------------------
+    public Employee createEmployeeFromXml(String xmlContent) throws Exception {
         // Step 1: Validate XML structure using XSD
         XmlValidator.validateAgainstXSD(xmlContent);
 
-        // Step 2: Convert XML → EmployeeXml object (Unmarshal)
+        // Step 2: Convert XML -> EmployeeXml object
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
         EmployeeXml employeeXml = (EmployeeXml) unmarshaller.unmarshal(new StringReader(xmlContent));
 
-        // Step 3: Perform Javax validation on fields
+        // Step 3: Validate business rules using @ annotations
         validateEmployeeXml(employeeXml);
 
-        // Step 4: Convert EmployeeXml -> Employee entity
+        // Step 4: Convert to JPA entity
         Employee employee = mapToEntity(employeeXml);
 
-        // Step 5: Persist data into MySQL database
+        // Step 5: Save to database
         return employeeRepository.save(employee);
     }
 
-    // Validate constraints defined in EmployeeXml.java
+    // ------------------------------------------------------------
+    // 2️⃣ UPDATE EMPLOYEE (PUT /employees/{id})
+    // ------------------------------------------------------------
+    public Employee updateEmployeeFromXml(Long id, String xmlContent) throws Exception {
+        Employee existing = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found with ID: " + id));
+
+        // Step 1: Validate structure with XSD
+        XmlValidator.validateAgainstXSD(xmlContent);
+
+        // Step 2: Unmarshal XML into EmployeeXml object
+        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+        EmployeeXml employeeXml = (EmployeeXml) unmarshaller.unmarshal(new StringReader(xmlContent));
+
+        // Step 3: Validate field-level data
+        validateEmployeeXml(employeeXml);
+
+        // Step 4: Update existing entity fields
+        existing.setName(employeeXml.getName());
+        existing.setEmail(employeeXml.getEmail());
+        existing.setDepartment(employeeXml.getDepartment());
+        existing.setDateOfJoining(employeeXml.getDateOfJoining());
+        existing.setUpdatedAt(java.time.LocalDateTime.now());
+
+        // Step 5: Save updated record
+        return employeeRepository.save(existing);
+    }
+
+    // ------------------------------------------------------------
+    // 3️⃣ GET EMPLOYEE BY ID (GET /employees/{id})
+    // ------------------------------------------------------------
+    public Employee getEmployeeById(Long id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found with ID: " + id));
+    }
+
+    // ------------------------------------------------------------
+    // 4️⃣ DELETE EMPLOYEE (DELETE /employees/{id})
+    // ------------------------------------------------------------
+    public void deleteEmployee(Long id) {
+        Employee existing = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found with ID: " + id));
+        employeeRepository.delete(existing);
+    }
+
+    // ------------------------------------------------------------
+    // 5️⃣ LIST ALL EMPLOYEES (GET /employees)
+    // ------------------------------------------------------------
+    public List<Employee> listAllEmployees() {
+        return employeeRepository.findAll();
+    }
+
+    // ------------------------------------------------------------
+    // Helper: Validate EmployeeXml fields with javax.validation
+    // ------------------------------------------------------------
     private void validateEmployeeXml(EmployeeXml employeeXml) {
         Set<ConstraintViolation<EmployeeXml>> violations = validator.validate(employeeXml);
         if (!violations.isEmpty()) {
@@ -69,13 +127,15 @@ public class EmployeeXmlService {
         }
     }
 
-    // Converts the XML model into a database entity
-    private Employee mapToEntity(EmployeeXml employeeXml) {
+    // ------------------------------------------------------------
+    // Helper: Convert XML model to database entity
+    // ------------------------------------------------------------
+    private Employee mapToEntity(EmployeeXml xml) {
         return Employee.builder()
-                .name(employeeXml.getName())
-                .email(employeeXml.getEmail())
-                .department(employeeXml.getDepartment())
-                .dateOfJoining(employeeXml.getDateOfJoining())
+                .name(xml.getName())
+                .email(xml.getEmail())
+                .department(xml.getDepartment())
+                .dateOfJoining(xml.getDateOfJoining())
                 .status("ACTIVE")
                 .build();
     }
