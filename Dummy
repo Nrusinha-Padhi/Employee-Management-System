@@ -1,24 +1,76 @@
-package com.example.employeesystem.repository;
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Employee">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="name" type="xs:string"/>
+        <xs:element name="email" type="xs:string"/>
+        <xs:element name="department" type="xs:string"/>
+        <xs:element name="dateOfJoining" type="xs:date"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
 
-import com.example.employeesystem.entity.Employee;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import java.util.Optional;
 
-@Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-    Optional<Employee> findByEmail(String email);
+
+
+
+package com.example.employeesystem.xmlmodel;
+
+import jakarta.xml.bind.annotation.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+import java.time.LocalDate;
+
+@XmlRootElement(name = "Employee")
+@XmlAccessorType(XmlAccessType.FIELD)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class EmployeeXml {
+
+    @NotBlank(message = "Name is required")
+    @Size(max = 100, message = "Name cannot exceed 100 characters")
+    private String name;
+
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
+    @Size(max = 150, message = "Email cannot exceed 150 characters")
+    private String email;
+
+    @NotBlank(message = "Department is required")
+    @Size(max = 100, message = "Department cannot exceed 100 characters")
+    private String department;
+
+    @NotNull(message = "Date of joining is required")
+    @PastOrPresent(message = "Date of joining cannot be in the future")
+    private LocalDate dateOfJoining;
 }
 
 
 
 
-package com.example.employeesystem.repository;
 
-import com.example.employeesystem.entity.AuditLog;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface AuditLogRepository extends JpaRepository<AuditLog, Long> {
+
+package com.example.employeesystem.utils;
+
+import javax.xml.XMLConstants;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.*;
+import java.io.StringReader;
+
+public class XmlValidator {
+
+    private static final String SCHEMA_PATH = "xsd/employee.xsd";
+
+    public static void validateAgainstXSD(String xmlContent) throws Exception {
+        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema = factory.newSchema(new StreamSource(
+                XmlValidator.class.getClassLoader().getResourceAsStream(SCHEMA_PATH)));
+        Validator validator = schema.newValidator();
+        validator.validate(new StreamSource(new StringReader(xmlContent)));
+    }
 }
