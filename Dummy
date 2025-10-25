@@ -1,80 +1,97 @@
-package com.example.employeesystem.controller;
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-10-26T03:12:13.208+05:30 ERROR 13952 --- [employee-management-system] [  restartedMain] o.s.boot.SpringApplication               : Application run failed
 
-import com.example.employeesystem.entity.Employee;
-import com.example.employeesystem.service.EmployeeXmlService;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-@RestController
-@RequestMapping("/employees")
-public class EmployeeController {
-
-    private final EmployeeXmlService employeeXmlService;
-
-    public EmployeeController(EmployeeXmlService employeeXmlService) {
-        this.employeeXmlService = employeeXmlService;
-    }
-
-    // ------------------------------------------------------------
-    // 1️⃣ Create Employee (POST /employees)
-    // ------------------------------------------------------------
-    @PostMapping(
-        consumes = MediaType.APPLICATION_XML_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<Employee> createEmployee(@RequestBody String xmlContent) throws Exception {
-        Employee createdEmployee = employeeXmlService.createEmployeeFromXml(xmlContent);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdEmployee);
-    }
-
-    // ------------------------------------------------------------
-    // 2️⃣ Update Employee (PUT /employees/{id})
-    // ------------------------------------------------------------
-    @PutMapping(
-        value = "/{id}",
-        consumes = MediaType.APPLICATION_XML_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<Employee> updateEmployee(
-            @PathVariable Long id,
-            @RequestBody String xmlContent) throws Exception {
-
-        Employee updatedEmployee = employeeXmlService.updateEmployeeFromXml(id, xmlContent);
-        return ResponseEntity.ok(updatedEmployee);
-    }
-
-    // ------------------------------------------------------------
-    // 3️⃣ Retrieve Employee by ID (GET /employees/{id})
-    // ------------------------------------------------------------
-    @GetMapping(
-        value = "/{id}",
-        produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
-        Employee employee = employeeXmlService.getEmployeeById(id);
-        return ResponseEntity.ok(employee);
-    }
-
-    // ------------------------------------------------------------
-    // 4️⃣ Delete Employee (DELETE /employees/{id})
-    // ------------------------------------------------------------
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
-        employeeXmlService.deleteEmployee(id);
-        return ResponseEntity.ok("Employee deleted successfully");
-    }
-
-    // ------------------------------------------------------------
-    // 5️⃣ List All Employees (GET /employees)
-    // ------------------------------------------------------------
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Employee>> listAllEmployees() {
-        List<Employee> employees = employeeXmlService.listAllEmployees();
-        return ResponseEntity.ok(employees);
-    }
-}
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'employeeController' defined in file [C:\Users\2366896\OneDrive - Cognizant\Desktop\employee-management-system\target\classes\com\example\employeemanagement\controller\EmployeeController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'employeeService' defined in file [C:\Users\2366896\OneDrive - Cognizant\Desktop\employee-management-system\target\classes\com\example\employeemanagement\service\EmployeeService.class]: Unsatisfied dependency expressed through constructor parameter 1: Error creating bean with name 'employeeJaxbContext' defined in class path resource [com/example/employeemanagement/config/XmlConfig.class]: Failed to instantiate [jakarta.xml.bind.JAXBContext]: Factory method 'employeeJaxbContext' threw exception with message: Implementation of Jakarta XML Binding-API has not been found on module path or classpath.
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1395) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1232) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:569) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1228) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1194) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1130) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:990) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350) ~[spring-boot-3.5.7.jar:3.5.7]
+	at com.example.employeemanagement.EmployeeManagementSystemApplication.main(EmployeeManagementSystemApplication.java:10) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.5.7.jar:3.5.7]
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'employeeService' defined in file [C:\Users\2366896\OneDrive - Cognizant\Desktop\employee-management-system\target\classes\com\example\employeemanagement\service\EmployeeService.class]: Unsatisfied dependency expressed through constructor parameter 1: Error creating bean with name 'employeeJaxbContext' defined in class path resource [com/example/employeemanagement/config/XmlConfig.class]: Failed to instantiate [jakarta.xml.bind.JAXBContext]: Factory method 'employeeJaxbContext' threw exception with message: Implementation of Jakarta XML Binding-API has not been found on module path or classpath.
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1395) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1232) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:569) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1708) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1653) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791) ~[spring-beans-6.2.12.jar:6.2.12]
+	... 24 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'employeeJaxbContext' defined in class path resource [com/example/employeemanagement/config/XmlConfig.class]: Failed to instantiate [jakarta.xml.bind.JAXBContext]: Factory method 'employeeJaxbContext' threw exception with message: Implementation of Jakarta XML Binding-API has not been found on module path or classpath.
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:657) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:489) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1375) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1205) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:569) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1770) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1653) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791) ~[spring-beans-6.2.12.jar:6.2.12]
+	... 37 common frames omitted
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [jakarta.xml.bind.JAXBContext]: Factory method 'employeeJaxbContext' threw exception with message: Implementation of Jakarta XML Binding-API has not been found on module path or classpath.
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:200) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiateWithFactoryMethod(SimpleInstantiationStrategy.java:89) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:169) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653) ~[spring-beans-6.2.12.jar:6.2.12]
+	... 51 common frames omitted
+Caused by: jakarta.xml.bind.JAXBException: Implementation of Jakarta XML Binding-API has not been found on module path or classpath.
+	at jakarta.xml.bind.ContextFinder.newInstance(ContextFinder.java:250) ~[jakarta.xml.bind-api-4.0.4.jar:4.0.4]
+	at jakarta.xml.bind.ContextFinder.newInstance(ContextFinder.java:238) ~[jakarta.xml.bind-api-4.0.4.jar:4.0.4]
+	at jakarta.xml.bind.ContextFinder.find(ContextFinder.java:379) ~[jakarta.xml.bind-api-4.0.4.jar:4.0.4]
+	at jakarta.xml.bind.JAXBContext.newInstance(JAXBContext.java:605) ~[jakarta.xml.bind-api-4.0.4.jar:4.0.4]
+	at jakarta.xml.bind.JAXBContext.newInstance(JAXBContext.java:546) ~[jakarta.xml.bind-api-4.0.4.jar:4.0.4]
+	at com.example.employeemanagement.config.XmlConfig.employeeJaxbContext(XmlConfig.java:15) ~[classes/:na]
+	at com.example.employeemanagement.config.XmlConfig$$SpringCGLIB$$0.CGLIB$employeeJaxbContext$0(<generated>) ~[classes/:na]
+	at com.example.employeemanagement.config.XmlConfig$$SpringCGLIB$$FastClass$$1.invoke(<generated>) ~[classes/:na]
+	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:258) ~[spring-core-6.2.12.jar:6.2.12]
+	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:400) ~[spring-context-6.2.12.jar:6.2.12]
+	at com.example.employeemanagement.config.XmlConfig$$SpringCGLIB$$0.employeeJaxbContext(<generated>) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:172) ~[spring-beans-6.2.12.jar:6.2.12]
+	... 54 common frames omitted
+Caused by: java.lang.ClassNotFoundException: org.glassfish.jaxb.runtime.v2.ContextFactory
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641) ~[na:na]
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188) ~[na:na]
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[na:na]
+	at java.base/java.lang.Class.forName0(Native Method) ~[na:na]
+	at java.base/java.lang.Class.forName(Class.java:529) ~[na:na]
+	at java.base/java.lang.Class.forName(Class.java:508) ~[na:na]
+	at org.springframework.boot.devtools.restart.classloader.RestartClassLoader.loadClass(RestartClassLoader.java:121) ~[spring-boot-devtools-3.5.7.jar:3.5.7]
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[na:na]
+	at jakarta.xml.bind.ServiceLoaderUtil.nullSafeLoadClass(ServiceLoaderUtil.java:113) ~[jakarta.xml.bind-api-4.0.4.jar:4.0.4]
+	at jakarta.xml.bind.ServiceLoaderUtil.safeLoadClass(ServiceLoaderUtil.java:146) ~[jakarta.xml.bind-api-4.0.4.jar:4.0.4]
+	at jakarta.xml.bind.ContextFinder.newInstance(ContextFinder.java:248) ~[jakarta.xml.bind-api-4.0.4.jar:4.0.4]
+	... 67 common frames omitted
