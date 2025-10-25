@@ -103,3 +103,8 @@ public class XmlValidator {
         <groupId>org.hibernate.validator</groupId>
         <artifactId>hibernate-validator</artifactId>
     </dependency>
+
+
+
+Description	Resource	Path	Location	Type
+'dependencies.dependency.version' for org.springframework.boot:spring-boot-starter-xml:jar is missing.	pom.xml	/employee-management-system	line 72	Language Servers
