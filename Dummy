@@ -74,3 +74,32 @@ public class XmlValidator {
         validator.validate(new StreamSource(new StringReader(xmlContent)));
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+ <!-- JAXB for XML Binding -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-xml</artifactId>
+    </dependency>
+
+    <!-- Jakarta Validation (Bean Validation API) -->
+    <dependency>
+        <groupId>jakarta.validation</groupId>
+        <artifactId>jakarta.validation-api</artifactId>
+    </dependency>
+
+    <!-- Hibernate Validator (implementation of Jakarta Validation) -->
+    <dependency>
+        <groupId>org.hibernate.validator</groupId>
+        <artifactId>hibernate-validator</artifactId>
+    </dependency>
