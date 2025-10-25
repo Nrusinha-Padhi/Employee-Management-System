@@ -1,16 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+  <!-- Root element -->
   <xs:element name="Employee">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="name" type="xs:string"/>
-        <xs:element name="email" type="xs:string"/>
-        <xs:element name="department" type="xs:string"/>
-        <xs:element name="dateOfJoining" type="xs:date"/>
+
+        <!-- name: required -->
+        <xs:element name="name" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>Full name of the employee (Required)</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+
+        <!-- email: must be valid format -->
+        <xs:element name="email">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <!-- basic email pattern, XSD 1.0 does not support regex groups -->
+              <xs:pattern value="[^@]+@[^@]+\.[^@]+"/>
+              <xs:maxLength value="150"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+
+        <!-- department: required -->
+        <xs:element name="department" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>Department name (Required)</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+
+        <!-- dateOfJoining: must be a valid date -->
+        <xs:element name="dateOfJoining" type="xs:date">
+          <xs:annotation>
+            <xs:documentation>Joining date (cannot be in the future — validated at field level later)</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+
       </xs:sequence>
     </xs:complexType>
   </xs:element>
 </xs:schema>
+
 
 
 
@@ -67,19 +101,14 @@ public class XmlValidator {
     private static final String SCHEMA_PATH = "xsd/employee.xsd";
 
     public static void validateAgainstXSD(String xmlContent) throws Exception {
-        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = factory.newSchema(new StreamSource(
-                XmlValidator.class.getClassLoader().getResourceAsStream(SCHEMA_PATH)));
+        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema = schemaFactory.newSchema(
+                new StreamSource(XmlValidator.class.getClassLoader().getResourceAsStream(SCHEMA_PATH))
+        );
         Validator validator = schema.newValidator();
         validator.validate(new StreamSource(new StringReader(xmlContent)));
     }
 }
-
-
-
-
-
-
 
 
 
@@ -99,6 +128,7 @@ public class XmlConfig {
 
     @Bean
     public JAXBContext employeeJaxbContext() throws JAXBException {
+        // Creates a context for EmployeeXml class for marshalling/unmarshalling
         return JAXBContext.newInstance(EmployeeXml.class);
     }
 }
