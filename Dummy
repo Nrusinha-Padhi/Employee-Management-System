@@ -10,3 +10,12 @@
     <artifactId>jaxb-runtime</artifactId>
     <version>4.0.2</version>
 </dependency>
+
+
+
+<Employee>
+    <name>Priya Sharma</name>
+    <email>priya.sharma@example.com</email>
+    <department>Finance</department>
+    <dateOfJoining>2025-10-01</dateOfJoining>
+</Employee>
