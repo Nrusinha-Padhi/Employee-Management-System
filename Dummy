@@ -1,8 +1,285 @@
-{
-    "timestamp": "2025-10-26T06:42:02.205+00:00",
-    "status": 500,
-    "error": "Internal Server Error",
-    "trace": "java.lang.NoSuchMethodError: java.time.LocalDate.<init>()\r\n\tat org.glassfish.jaxb.core.v2.ClassFactory.tryGetDeclaredConstructor(ClassFactory.java:109)\r\n\tat org.glassfish.jaxb.core.v2.ClassFactory.create0(ClassFactory.java:70)\r\n\tat org.glassfish.jaxb.runtime.v2.runtime.ClassBeanInfoImpl.createInstance(ClassBeanInfoImpl.java:255)\r\n\tat org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.UnmarshallingContext.createInstance(UnmarshallingContext.java:655)\r\n\tat org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.StructureLoader.startElement(StructureLoader.java:156)\r\n\tat org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.UnmarshallingContext._startElement(UnmarshallingContext.java:530)\r\n\tat org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.UnmarshallingContext.startElement(UnmarshallingContext.java:509)\r\n\tat org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.SAXConnector.startElement(SAXConnector.java:137)\r\n\tat java.xml/com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.startElement(AbstractSAXParser.java:519)\r\n\tat java.xml/com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.scanStartElement(XMLNSDocumentScannerImpl.java:375)\r\n\tat java.xml/com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl$FragmentContentDriver.next(XMLDocumentFragmentScannerImpl.java:2735)\r\n\tat java.xml/com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:635)\r\n\tat java.xml/com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.next(XMLNSDocumentScannerImpl.java:113)\r\n\tat java.xml/com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:551)\r\n\tat java.xml/com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:890)\r\n\tat java.xml/com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:826)\r\n\tat java.xml/com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:134)\r\n\tat java.xml/com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.parse(AbstractSAXParser.java:1225)\r\n\tat java.xml/com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser.parse(SAXParserImpl.java:643)\r\n\tat org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.UnmarshallerImpl.unmarshal0(UnmarshallerImpl.java:218)\r\n\tat org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.UnmarshallerImpl.unmarshal(UnmarshallerImpl.java:189)\r\n\tat jakarta.xml.bind.helpers.AbstractUnmarshallerImpl.unmarshal(AbstractUnmarshallerImpl.java:152)\r\n\tat jakarta.xml.bind.helpers.AbstractUnmarshallerImpl.unmarshal(AbstractUnmarshallerImpl.java:205)\r\n\tat com.example.employeemanagement.service.EmployeeService.createEmployeeFromXml(EmployeeService.java:45)\r\n\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)\r\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)\r\n\tat org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:360)\r\n\tat org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)\r\n\tat org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)\r\n\tat org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:380)\r\n\tat org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)\r\n\tat org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)\r\n\tat org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:728)\r\n\tat com.example.employeemanagement.service.EmployeeService$$SpringCGLIB$$0.createEmployeeFromXml(<generated>)\r\n\tat com.example.employeemanagement.controller.EmployeeController.createEmployee(EmployeeController.java:37)\r\n\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)\r\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)\r\n\tat org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)\r\n\tat org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)\r\n\tat org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)\r\n\tat org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:991)\r\n\tat org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:896)\r\n\tat org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)\r\n\tat org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)\r\n\tat org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)\r\n\tat org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)\r\n\tat org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)\r\n\tat jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)\r\n\tat org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)\r\n\tat jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)\r\n\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)\r\n\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)\r\n\tat org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)\r\n\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)\r\n\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)\r\n\tat org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)\r\n\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)\r\n\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)\r\n\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)\r\n\tat org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)\r\n\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)\r\n\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)\r\n\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)\r\n\tat org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)\r\n\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)\r\n\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)\r\n\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)\r\n\tat org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)\r\n\tat org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88)\r\n\tat org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)\r\n\tat org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)\r\n\tat org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)\r\n\tat org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)\r\n\tat org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)\r\n\tat org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399)\r\n\tat org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)\r\n\tat org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)\r\n\tat org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1774)\r\n\tat org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)\r\n\tat org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)\r\n\tat org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)\r\n\tat org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)\r\n\tat java.base/java.lang.Thread.run(Thread.java:1570)\r\nCaused by: java.lang.NoSuchMethodException: java.time.LocalDate.<init>()\r\n\tat java.base/java.lang.Class.getConstructor0(Class.java:3784)\r\n\tat java.base/java.lang.Class.getDeclaredConstructor(Class.java:2955)\r\n\tat org.glassfish.jaxb.core.v2.ClassFactory.tryGetDeclaredConstructor(ClassFactory.java:101)\r\n\t... 82 more\r\n",
-    "message": "java.time.LocalDate.<init>()",
-    "path": "/employees"
+package com.example.employeemanagement.service;
+
+import java.util.List;
+import java.util.Set;
+
+import javax.xml.transform.stream.StreamSource;
+
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.example.employeemanagement.entity.Employee;
+import com.example.employeemanagement.entity.EmployeeXml;
+import com.example.employeemanagement.repository.EmployeeRepository;
+//import com.example.employeemanagement.utils.XMLValidator;
+import java.io.*;
+import java.time.LocalDate;
+
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Unmarshaller;
+
+@Service
+@Transactional
+public class EmployeeService {
+
+    private final EmployeeRepository employeeRepository;
+//    private final JAXBContext jaxbContext;
+//    private final Validator validator;
+    private final Jaxb2Marshaller marshaller;
+    
+    public EmployeeService(EmployeeRepository employeeRepository,Jaxb2Marshaller marshaller) {
+        this.employeeRepository = employeeRepository;
+//        this.jaxbContext = jaxbContext;
+        this.marshaller=marshaller;
+
+//        // Initialize javax.validation validator
+//        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+//        this.validator = factory.getValidator();
+    }
+
+    // ------------------------------------------------------------
+    // 1️⃣ CREATE EMPLOYEE (POST /employees)
+    // ------------------------------------------------------------
+    public Employee createEmployeeFromXml(String xmlContent) throws Exception {
+        // Step 1: Validate XML structure using XSD
+//        XMLValidator.validateAgainstXSD(xmlContent);
+
+        // Step 2: Convert XML -> EmployeeXml object
+       // Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+        
+        EmployeeXml employeeXml = (EmployeeXml) marshaller.unmarshal(new StreamSource(new StringReader(xmlContent)));
+
+        // Step 3: Validate business rules using @ annotations
+//        validateEmployeeXml(employeeXml);
+
+        // Step 4: Convert to JPA entity
+        Employee employee = mapToEntity(employeeXml);
+
+        // Step 5: Save to database
+        return employeeRepository.save(employee);
+    }
+
+    // ------------------------------------------------------------
+    // 2️⃣ UPDATE EMPLOYEE (PUT /employees/{id})
+    // ------------------------------------------------------------
+    public Employee updateEmployeeFromXml(Long id, String xmlContent) throws Exception {
+        Employee existing = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found with ID: " + id));
+
+        // Step 1: Validate structure with XSD
+       // XMLValidator.validateAgainstXSD(xmlContent);
+
+        // Step 2: Unmarshal XML into EmployeeXml object
+        //Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+        EmployeeXml employeeXml = (EmployeeXml) marshaller.unmarshal(new StreamSource(new StringReader(xmlContent)));
+
+        // Step 3: Validate field-level data
+        //validateEmployeeXml(employeeXml);
+
+        // Step 4: Update existing entity fields
+        existing.setName(employeeXml.getName());
+        existing.setEmail(employeeXml.getEmail());
+        existing.setDepartment(employeeXml.getDepartment());
+        existing.setDateOfJoining(existing.getDateOfJoining());
+        existing.setUpdatedAt(java.time.LocalDateTime.now());
+
+        // Step 5: Save updated record
+        return employeeRepository.save(existing);
+    }
+
+    // ------------------------------------------------------------
+    // 3️⃣ GET EMPLOYEE BY ID (GET /employees/{id})
+    // ------------------------------------------------------------
+    public Employee getEmployeeById(Long id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found with ID: " + id));
+    }
+
+    // ------------------------------------------------------------
+    // 4️⃣ DELETE EMPLOYEE (DELETE /employees/{id})
+    // ------------------------------------------------------------
+    public void deleteEmployee(Long id) {
+        Employee existing = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found with ID: " + id));
+        employeeRepository.delete(existing);
+    }
+
+    // ------------------------------------------------------------
+    // 5️⃣ LIST ALL EMPLOYEES (GET /employees)
+    // ------------------------------------------------------------
+    public List<Employee> listAllEmployees() {
+        return employeeRepository.findAll();
+    }
+
+//    // ------------------------------------------------------------
+//    // Helper: Validate EmployeeXml fields with javax.validation
+//    // ------------------------------------------------------------
+//    private void validateEmployeeXml(EmployeeXml employeeXml) {
+//        Set<ConstraintViolation<EmployeeXml>> violations = validator.validate(employeeXml);
+//        if (!violations.isEmpty()) {
+//            StringBuilder errorMsg = new StringBuilder("Validation errors: ");
+//            for (ConstraintViolation<EmployeeXml> violation : violations) {
+//                errorMsg.append(violation.getPropertyPath())
+//                        .append(" ")
+//                        .append(violation.getMessage())
+//                        .append("; ");
+//            }
+//            throw new RuntimeException(errorMsg.toString());
+//        }
+//    }
+
+    // ------------------------------------------------------------
+    // Helper: Convert XML model to database entity
+    // ------------------------------------------------------------
+    private Employee mapToEntity(EmployeeXml xml) {
+        return Employee.builder()
+                .name(xml.getName())
+                .email(xml.getEmail())
+                .department(xml.getDepartment())
+                .dateOfJoining(LocalDate.now())
+                .status("ACTIVE")
+                .build();
+    }
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+package com.example.employeemanagement.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+
+import com.example.employeemanagement.entity.EmployeeXml;
+
+@Configuration
+public class XmlConfig {
+
+//	@Bean
+//    public JAXBContext employeeJaxbContext() throws JAXBException {
+//        // Creates a context for EmployeeXml class for marshalling/unmarshalling
+//        return JAXBContext.newInstance(EmployeeXml.class);
+//    }
+	@Bean
+	public Jaxb2Marshaller marshaller() throws Exception{
+		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+		marshaller.setClassesToBeBound(EmployeeXml.class);
+		marshaller.setSchema(new ClassPathResource("employee.xsd"));
+		return marshaller;
+		
+	}
+ 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+package com.example.employeemanagement.entity;
+
+import java.time.LocalDate;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@XmlRootElement(name = "Employee")
+@XmlAccessorType(XmlAccessType.FIELD)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class EmployeeXml {
+	@NotBlank(message = "Name is required")
+	@Size(min=1, max = 100, message = "Name cannot exceed 100 characters")
+	private String name;
+
+	@NotBlank(message = "Email is required")
+	@Email(message = "Invalid email format")
+	@Size(min=1,max = 150, message = "Email cannot exceed 150 characters")
+	private String email;
+
+	@NotBlank(message = "Department is required")
+	@Size(min=1,max = 100, message = "Department cannot exceed 100 characters")
+	private String department;
+
+	@XmlTransient
+	@NotNull(message = "Date of joining is required")
+	@PastOrPresent(message = "Date of joining cannot be in the future")
+	private LocalDate dateOfJoining;
+	 	
 }
