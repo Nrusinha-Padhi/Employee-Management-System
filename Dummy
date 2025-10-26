@@ -1,213 +1,39 @@
-package com.example.employeemanagement.service;
-
-import java.util.List;
-import java.util.Set;
-
-import javax.xml.transform.stream.StreamSource;
-
-import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import com.example.employeemanagement.entity.Employee;
-import com.example.employeemanagement.entity.EmployeeXml;
-import com.example.employeemanagement.repository.EmployeeRepository;
-//import com.example.employeemanagement.utils.XMLValidator;
-import java.io.*;
-import java.time.LocalDate;
-
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.Unmarshaller;
-
-@Service
-@Transactional
-public class EmployeeService {
-
-    private final EmployeeRepository employeeRepository;
-//    private final JAXBContext jaxbContext;
-//    private final Validator validator;
-    private final Jaxb2Marshaller marshaller;
-    
-    public EmployeeService(EmployeeRepository employeeRepository,Jaxb2Marshaller marshaller) {
-        this.employeeRepository = employeeRepository;
-//        this.jaxbContext = jaxbContext;
-        this.marshaller=marshaller;
-
-//        // Initialize javax.validation validator
-//        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-//        this.validator = factory.getValidator();
-    }
-
-    // ------------------------------------------------------------
-    // 1️⃣ CREATE EMPLOYEE (POST /employees)
-    // ------------------------------------------------------------
-    public Employee createEmployeeFromXml(String xmlContent) throws Exception {
-        // Step 1: Validate XML structure using XSD
-//        XMLValidator.validateAgainstXSD(xmlContent);
-
-        // Step 2: Convert XML -> EmployeeXml object
-       // Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        
-        EmployeeXml employeeXml = (EmployeeXml) marshaller.unmarshal(new StreamSource(new StringReader(xmlContent)));
-
-        // Step 3: Validate business rules using @ annotations
-//        validateEmployeeXml(employeeXml);
-
-        // Step 4: Convert to JPA entity
-        Employee employee = mapToEntity(employeeXml);
-
-        // Step 5: Save to database
-        return employeeRepository.save(employee);
-    }
-
-    // ------------------------------------------------------------
-    // 2️⃣ UPDATE EMPLOYEE (PUT /employees/{id})
-    // ------------------------------------------------------------
-    public Employee updateEmployeeFromXml(Long id, String xmlContent) throws Exception {
-        Employee existing = employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found with ID: " + id));
-
-        // Step 1: Validate structure with XSD
-       // XMLValidator.validateAgainstXSD(xmlContent);
-
-        // Step 2: Unmarshal XML into EmployeeXml object
-        //Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        EmployeeXml employeeXml = (EmployeeXml) marshaller.unmarshal(new StreamSource(new StringReader(xmlContent)));
-
-        // Step 3: Validate field-level data
-        //validateEmployeeXml(employeeXml);
-
-        // Step 4: Update existing entity fields
-        existing.setName(employeeXml.getName());
-        existing.setEmail(employeeXml.getEmail());
-        existing.setDepartment(employeeXml.getDepartment());
-        existing.setDateOfJoining(existing.getDateOfJoining());
-        existing.setUpdatedAt(java.time.LocalDateTime.now());
-
-        // Step 5: Save updated record
-        return employeeRepository.save(existing);
-    }
-
-    // ------------------------------------------------------------
-    // 3️⃣ GET EMPLOYEE BY ID (GET /employees/{id})
-    // ------------------------------------------------------------
-    public Employee getEmployeeById(Long id) {
-        return employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found with ID: " + id));
-    }
-
-    // ------------------------------------------------------------
-    // 4️⃣ DELETE EMPLOYEE (DELETE /employees/{id})
-    // ------------------------------------------------------------
-    public void deleteEmployee(Long id) {
-        Employee existing = employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found with ID: " + id));
-        employeeRepository.delete(existing);
-    }
-
-    // ------------------------------------------------------------
-    // 5️⃣ LIST ALL EMPLOYEES (GET /employees)
-    // ------------------------------------------------------------
-    public List<Employee> listAllEmployees() {
-        return employeeRepository.findAll();
-    }
-
-//    // ------------------------------------------------------------
-//    // Helper: Validate EmployeeXml fields with javax.validation
-//    // ------------------------------------------------------------
-//    private void validateEmployeeXml(EmployeeXml employeeXml) {
-//        Set<ConstraintViolation<EmployeeXml>> violations = validator.validate(employeeXml);
-//        if (!violations.isEmpty()) {
-//            StringBuilder errorMsg = new StringBuilder("Validation errors: ");
-//            for (ConstraintViolation<EmployeeXml> violation : violations) {
-//                errorMsg.append(violation.getPropertyPath())
-//                        .append(" ")
-//                        .append(violation.getMessage())
-//                        .append("; ");
-//            }
-//            throw new RuntimeException(errorMsg.toString());
-//        }
-//    }
-
-    // ------------------------------------------------------------
-    // Helper: Convert XML model to database entity
-    // ------------------------------------------------------------
-    private Employee mapToEntity(EmployeeXml xml) {
-        return Employee.builder()
-                .name(xml.getName())
-                .email(xml.getEmail())
-                .department(xml.getDepartment())
-                .dateOfJoining(LocalDate.now())
-                .status("ACTIVE")
-                .build();
-    }
-	
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 package com.example.employeemanagement.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.jms.annotation.EnableJms;
+import org.springframework.jms.core.JmsTemplate;
+import org.apache.activemq.ActiveMQConnectionFactory;
 
-import com.example.employeemanagement.entity.EmployeeXml;
+import javax.jms.ConnectionFactory;
 
 @Configuration
-public class XmlConfig {
+@EnableJms
+public class JmsConfig {
 
-//	@Bean
-//    public JAXBContext employeeJaxbContext() throws JAXBException {
-//        // Creates a context for EmployeeXml class for marshalling/unmarshalling
-//        return JAXBContext.newInstance(EmployeeXml.class);
-//    }
-	@Bean
-	public Jaxb2Marshaller marshaller() throws Exception{
-		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-		marshaller.setClassesToBeBound(EmployeeXml.class);
-		marshaller.setSchema(new ClassPathResource("employee.xsd"));
-		return marshaller;
-		
-	}
- 
+    @Value("${spring.activemq.broker-url}")
+    private String brokerUrl;
+
+    @Value("${spring.activemq.user}")
+    private String userName;
+
+    @Value("${spring.activemq.password}")
+    private String password;
+
+    @Bean
+    public ConnectionFactory connectionFactory() {
+        return new ActiveMQConnectionFactory(userName, password, brokerUrl);
+    }
+
+    @Bean
+    public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
+        JmsTemplate template = new JmsTemplate(connectionFactory);
+        template.setPubSubDomain(false); // Queue mode
+        template.setDefaultDestinationName("employee.events");
+        return template;
+    }
 }
 
 
@@ -216,70 +42,80 @@ public class XmlConfig {
 
 
 
+package com.example.employeemanagement.jms;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-package com.example.employeemanagement.entity;
-
-import java.time.LocalDate;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Size;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.Instant;
 
-@XmlRootElement(name = "Employee")
-@XmlAccessorType(XmlAccessType.FIELD)
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class EmployeeXml {
-	@NotBlank(message = "Name is required")
-	@Size(min=1, max = 100, message = "Name cannot exceed 100 characters")
-	private String name;
+public class EmployeeEvent {
+    private Long employeeId;
+    private String action; // CREATE, UPDATE, DELETE
+    private Instant timestamp;
+}
 
-	@NotBlank(message = "Email is required")
-	@Email(message = "Invalid email format")
-	@Size(min=1,max = 150, message = "Email cannot exceed 150 characters")
-	private String email;
 
-	@NotBlank(message = "Department is required")
-	@Size(min=1,max = 100, message = "Department cannot exceed 100 characters")
-	private String department;
 
-	@XmlTransient
-	@NotNull(message = "Date of joining is required")
-	@PastOrPresent(message = "Date of joining cannot be in the future")
-	private LocalDate dateOfJoining;
-	 	
+
+
+
+
+
+package com.example.employeemanagement.jms;
+
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.stereotype.Component;
+
+@Component
+public class EmployeeEventPublisher {
+
+    private final JmsTemplate jmsTemplate;
+
+    public EmployeeEventPublisher(JmsTemplate jmsTemplate) {
+        this.jmsTemplate = jmsTemplate;
+    }
+
+    public void publishEvent(EmployeeEvent event) {
+        jmsTemplate.convertAndSend("employee.events", event);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+private final EmployeeEventPublisher eventPublisher;
+
+public EmployeeService(EmployeeRepository employeeRepository, Jaxb2Marshaller marshaller,
+                       EmployeeEventPublisher eventPublisher) {
+    this.employeeRepository = employeeRepository;
+    this.marshaller = marshaller;
+    this.eventPublisher = eventPublisher;
+}
+
+public Employee createEmployeeFromXml(String xmlContent) throws Exception {
+    // ... existing logic ...
+    Employee saved = employeeRepository.save(employee);
+    eventPublisher.publishEvent(EmployeeEvent.builder()
+        .employeeId(saved.getId())
+        .action("CREATE")
+        .timestamp(java.time.Instant.now())
+        .build());
+    return saved;
 }
