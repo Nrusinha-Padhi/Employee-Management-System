@@ -1,88 +1,40 @@
-package com.example.employeemanagement.config;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.jms.annotation.EnableJms;
-import org.springframework.jms.core.JmsTemplate;
-import org.apache.activemq.ActiveMQConnectionFactory;
-
-import javax.jms.ConnectionFactory;
-
-@Configuration
-@EnableJms
-public class JmsConfig {
-
-    @Value("${spring.activemq.broker-url}")
-    private String brokerUrl;
-
-    @Value("${spring.activemq.user}")
-    private String userName;
-
-    @Value("${spring.activemq.password}")
-    private String password;
-
-    @Bean
-    public ConnectionFactory connectionFactory() {
-        return new ActiveMQConnectionFactory(userName, password, brokerUrl);
-    }
-
-    @Bean
-    public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
-        JmsTemplate template = new JmsTemplate(connectionFactory);
-        template.setPubSubDomain(false); // Queue mode
-        template.setDefaultDestinationName("employee.events");
-        return template;
-    }
-}
-
-
-
+EmployeeEvent event = new EmployeeEvent();
+event.setEmployeeId(saved.getId());
+event.setAction("CREATE");
+event.setTimestamp(java.time.Instant.now());
+eventPublisher.publishEvent(event);
 
 
 
 
 package com.example.employeemanagement.jms;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.time.Instant;
-
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class EmployeeEvent {
-    private Long employeeId;
-    private String action; // CREATE, UPDATE, DELETE
-    private Instant timestamp;
-}
-
-
-
-
-
-
-
-
-package com.example.employeemanagement.jms;
-
-import org.springframework.jms.core.JmsTemplate;
+import com.example.employeemanagement.entity.AuditLog;
+import com.example.employeemanagement.repository.AuditLogRepository;
+import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmployeeEventPublisher {
+public class EmployeeEventListener {
 
-    private final JmsTemplate jmsTemplate;
+    private final AuditLogRepository auditLogRepository;
 
-    public EmployeeEventPublisher(JmsTemplate jmsTemplate) {
-        this.jmsTemplate = jmsTemplate;
+    public EmployeeEventListener(AuditLogRepository auditLogRepository) {
+        this.auditLogRepository = auditLogRepository;
     }
 
-    public void publishEvent(EmployeeEvent event) {
-        jmsTemplate.convertAndSend("employee.events", event);
+    @JmsListener(destination = "employee.events")
+    public void onEmployeeEvent(EmployeeEvent event) {
+        AuditLog logEntry = AuditLog.builder()
+                .employeeId(event.getEmployeeId())
+                .action(event.getAction())
+                .timestamp(java.time.LocalDateTime.now())
+                .source("JMS")
+                .messageId(event.getTimestamp().toString())
+                .build();
+
+        auditLogRepository.save(logEntry);
+        System.out.println("[AUDIT] JMS event logged: " + logEntry);
     }
 }
 
@@ -92,30 +44,15 @@ public class EmployeeEventPublisher {
 
 
 
+@JmsListener(destination = "employee.events")
+public void onEmployeeEvent(EmployeeEvent event) {
+    AuditLog logEntry = new AuditLog();
+    logEntry.setEmployeeId(event.getEmployeeId());
+    logEntry.setAction(event.getAction());
+    logEntry.setTimestamp(java.time.LocalDateTime.now());
+    logEntry.setSource("JMS");
+    logEntry.setMessageId(event.getTimestamp().toString());
 
-
-
-
-
-
-
-
-private final EmployeeEventPublisher eventPublisher;
-
-public EmployeeService(EmployeeRepository employeeRepository, Jaxb2Marshaller marshaller,
-                       EmployeeEventPublisher eventPublisher) {
-    this.employeeRepository = employeeRepository;
-    this.marshaller = marshaller;
-    this.eventPublisher = eventPublisher;
-}
-
-public Employee createEmployeeFromXml(String xmlContent) throws Exception {
-    // ... existing logic ...
-    Employee saved = employeeRepository.save(employee);
-    eventPublisher.publishEvent(EmployeeEvent.builder()
-        .employeeId(saved.getId())
-        .action("CREATE")
-        .timestamp(java.time.Instant.now())
-        .build());
-    return saved;
+    auditLogRepository.save(logEntry);
+    System.out.println("[AUDIT] JMS event logged: " + logEntry);
 }
