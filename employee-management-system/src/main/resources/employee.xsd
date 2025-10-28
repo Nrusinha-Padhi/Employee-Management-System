@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+  <!-- Root element -->
+  <xs:element name="Employee">
+    <xs:complexType>
+      <xs:sequence>
+
+        <!-- name: required -->
+        <xs:element name="name" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>Full name of the employee (Required)</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+
+        <!-- email: must be valid format -->
+        <xs:element name="email">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <!-- basic email pattern, XSD 1.0 does not support regex groups -->
+              <xs:pattern value="[^@]+@[^@]+\.[^@]+"/>
+              <xs:maxLength value="150"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+
+        <!-- department: required -->
+        <xs:element name="department" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>Department name (Required)</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+
+        <!-- dateOfJoining: must be a valid date -->
+        <xs:element name="dateOfJoining" type="xs:date">
+          <xs:annotation>
+            <xs:documentation>Joining date (cannot be in the future — validated at field level later)</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
